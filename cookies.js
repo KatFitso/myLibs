@@ -11,11 +11,28 @@ export const getCookies = () => {
 };
 
 export const getCookie = (cookieName) => {
-  const cookies = getCookies();
+  const cookies = document.cookie.split(" ");
 
-  return cookies[cookieName];
+  return cookies.find((each) => each.startsWith(`${cookieName}=`));
 };
 
-export const setCookie = (cookieName, value) => {
-  document.cookie = `${cookieName}=${value}`;
+export const setCookie = (cookieName, value = "", days) => {
+  let expires = "";
+  if (days) {
+    const date = new Date();
+    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+    expires = `; expires=${date.toUTCString()}`;
+  }
+  document.cookie = `${cookieName}=${value}${expires}`;
+};
+
+export const deleteCookie = (cookieName) => {
+  const date = new Date();
+  date.setTime(date.getTime() - 2000);
+  document.cookie = `${cookieName}=""; expires=${date.toUTCString()}`;
+};
+
+export const nukeAllCookies = () => {
+  const cookies = getCookies();
+  Object.keys(cookies).forEach((cookie) => deleteCookie(cookie));
 };
