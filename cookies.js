@@ -16,20 +16,18 @@ export const getCookie = (cookieName) => {
   return cookies.find((each) => each.startsWith(`${cookieName}=`));
 };
 
-export const setCookie = (cookieName, value = "", days) => {
+export const setCookie = (cookieName, value = "", days, path = "/") => {
   let expires = "";
   if (days) {
     const date = new Date();
     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
     expires = `; expires=${date.toUTCString()}`;
   }
-  document.cookie = `${cookieName}=${value}${expires}`;
+  document.cookie = `${cookieName}=${value}${expires}; path=${path}`;
 };
 
 export const deleteCookie = (cookieName) => {
-  const date = new Date();
-  date.setTime(date.getTime() - 2000);
-  document.cookie = `${cookieName}=""; expires=${date.toUTCString()}`;
+  document.cookie = `${cookieName}=""; Max-age=-1`;
 };
 
 export const nukeAllCookies = () => {
